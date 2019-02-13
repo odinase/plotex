@@ -1,4 +1,4 @@
-function [fig, pl] = plot_nice(data, labels, font_size, varargin)
+function plot(obj)
 %% Function description
 % Makes a nice plot of arbitrary data in LaTeX font and returns a handler
 % to the figure and the plots in the figure
@@ -34,75 +34,68 @@ function [fig, pl] = plot_nice(data, labels, font_size, varargin)
 % ----------------------------------
 %% Code
     
-    disable_figure = any(strcmpi(varargin, 'disablefigure'));
-    
-    if ~disable_figure
-        fig = figure;
+    if ~obj.disable_figure
+        obj.fig = figure;
     end
     
-    pl = zeros(1, length(data));
+    obj.pl = zeros(1, obj.amount_of_data);
     
     % Used to get pretty colors
-    colors = linspecer(length(data));
+    colors = linspecer(obj.amount_of_data);
     
     % To get right type for later
-    if ~iscell(data)
-       data = {data}; 
+    if ~iscell(obj.data)
+       obj.data = {obj.data}; 
     end
     
-    if ~iscell(labels.legend)
-       labels.legend = {labels.legend}; 
+    if ~iscell(obj.labels.legend)
+       obj.labels.legend = {obj.labels.legend}; 
     end
-    
-    % Check for optional input parameters
-    use_loglog = any(strcmpi(varargin, 'loglog'));
-    use_grid_on = any(strcmpi(varargin, 'grid'));
-    use_thick_lines = any(strcmpi(varargin, 'thicklines'));
     
     %% Actual plotting
-    if use_loglog
-        for i = 1:length(data)
+    if obj.use_loglog
+        for i = 1:obj.amount_of_data
 
-            pl(i) = loglog(data{i}.time, data{i}.values, 'color', colors(i, :));
+            obj.pl(i) = loglog(obj.data{i}.time, obj.data{i}.values, 'color', colors(i, :));
             hold on
 
         end
     % Default is ordinary 'plot'    
     else
-        for i = 1:length(data)
+        for i = 1:obj.amount_of_data
         
-            pl(i) = plot(data{i}.time, data{i}.values, 'color', colors(i, :));
+            obj.pl(i) = plot(obj.data{i}.time, obj.data{i}.values, 'color', colors(i, :));
             hold on
             
         end
     end
     
     % Turn on grid if requested
-    if use_grid_on
+    if obj.use_grid_on
        grid on; 
     end
     
-    title({labels.title},   'Interpreter', 'latex', 'fontsize', font_size.title);
-    legend(labels.legend,   'Interpreter', 'latex', 'fontsize', font_size.legend, 'location', 'best');
-    ylabel({labels.ylabel}, 'Interpreter', 'latex');
-    xlabel({labels.xlabel}, 'Interpreter', 'latex');
+    title({obj.labels.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
+    legend(obj.labels.legend,   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
+    ylabel({obj.labels.ylabel}, 'Interpreter', 'latex');
+    xlabel({obj.labels.xlabel}, 'Interpreter', 'latex');
     
     % Set font size for axis
     
     xl = get(gca,'XLabel');
-    xlFontSize = get(xl,'FontSize');
+    %xlFontSize = get(xl,'FontSize');
     xAX = get(gca,'XAxis');
-    set(xAX,'FontSize', font_size.ticklabel)
-    set(xl, 'FontSize', font_size.xlabel);
+    set(xAX,'FontSize', obj.font_size.ticklabel)
+    set(xl, 'FontSize', obj.font_size.xlabel);
     
     yl = get(gca,'YLabel');
-    ylFontSize = get(yl,'FontSize');
+    %ylFontSize = get(yl,'FontSize');
     yAX = get(gca,'YAxis');
-    set(yAX,'FontSize', font_size.ticklabel)
-    set(yl, 'FontSize', font_size.ylabel);
+    set(yAX,'FontSize', obj.font_size.ticklabel)
+    set(yl, 'FontSize', obj.font_size.ylabel);
     set(gca, 'TickLabelInterpreter', 'latex');
     
-    if use_thick_lines
+    if obj.use_thick_lines
         set(pl, 'LineWidth', 3);
     end
     

@@ -2,35 +2,37 @@ classdef Plotex < handle
     %% Properties %%
    properties
        data;
+       labels;
+       font_size;
+       disable_figure;
+       use_loglog;
+       use_grid_on;
+       use_thick_lines;
    end
    
-   %properties (Access = private)
-   %   CSV_FOLDER = "CSV data/";
-   %end
+   properties (Access = private)
+      amount_of_data;
+      fig;
+      pl;
+   end
    %% Methods %%
    methods
       
        %%% Constructor %%%
       function obj = Plotex(varargin)
-         obj.data = new_data(varargin{:});
+            obj.new_data(varargin{:});
+            obj.init();
       end
       %%% ----------- %%%
       
-      data = new_data(varargin);
+      new_data(obj, varargin);
       plot2pdf(path, filename, fig, varargin);
-      
-      %rms = calculateRMS(obj);
-      %avg = calculateAvg(obj);
-      %printData(obj);
-      %plotData(obj);
-      %retrieveDataFromCSV(obj);
-      %setInterval(obj, start, stop);
-      %time_length = findTimeLength(obj);
-      
+      plot(obj);
+
    end
    
    methods (Access = private)
-       approximatedIndex = approximateIndex(obj, vector, index);
-       cleanVariablesForUnderscore(obj);
+       parse_data(obj, data);
+       init(obj);
    end
 end
