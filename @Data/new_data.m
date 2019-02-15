@@ -27,5 +27,3 @@ function new_data(obj, varargin)
     end
     
 end
-
-

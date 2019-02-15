@@ -19,7 +19,7 @@ classdef Plotex < handle
    methods
       
        %%% Constructor %%%
-      function obj = Plotex(data)
+      function obj = Plotex(varargin)
             obj.init();
       end
       %%% ----------- %%%
@@ -30,6 +30,7 @@ classdef Plotex < handle
    end
    
    methods (Access = private)
+       parse_data(obj, data);
        init(obj);
    end
 end
