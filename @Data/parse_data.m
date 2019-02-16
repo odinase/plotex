@@ -1,22 +1,22 @@
-function parse_data(obj, data)
+function parsed_data = parse_data(data)
 
     data_type = class(data);    
 
     switch data_type
         case 'struct'
-            obj.data = struct(...
+            parsed_data = struct(...
             'time', data.time,...
             'values', data.signals.values);
         case 'double'
             [rows, ~] = size(data);
-            obj.data = cell(1, rows - 1);
+            parsed_data = cell(1, rows - 1);
             for i = 2:rows
-                obj.data{i - 1} = struct(...
+                parsed_data{i - 1} = struct(...
                     'time', data(1, :),...
                     'values', data(i, :));
             end
         otherwise
-            obj.data = {};   
+            parsed_data = {};   
    end
 end
 
