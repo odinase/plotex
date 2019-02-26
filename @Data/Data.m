@@ -36,13 +36,14 @@ classdef Data < handle
     end
     
     methods (Static)
-        parse_data(data);
+        parsed_data = parse_data(data);
+        structified_data = structify_data(time, values);
         
     end
     
     methods (Access = private)
         new_data(obj, varargin);
-        structified_data = structify_data(obj, data);
+        
     end
 end
 

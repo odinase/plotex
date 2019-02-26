@@ -4,32 +4,37 @@ function parsed_data = parse_data(data)
 
     switch data_type
         case {'char', 'string'}
-            handle_string(data);
+            parsed_data = load_from_file(data);
         case 'struct'
-            parsed_data = struct(...
-            'time', data.time,...
-            'values', data.signals.values);
+            parsed_data = Data.structify_data(data.time, data.signals.values);
         case 'double'
             [rows, ~] = size(data);
             parsed_data = cell(1, rows - 1);
             for i = 2:rows
-                parsed_data{i - 1} = struct(...
-                    'time', data(1, :),...
-                    'values', data(i, :));
+                parsed_data{i - 1} = Data.structify_data(data(1, :), data(i, :));
             end
         otherwise
             parsed_data = {};   
    end
 end
 
+function loaded_data = load_from_file(data)
 
-% switch n
-%     case -1
-%         disp('negative one')
-%     case 0
-%         disp('zero')
-%     case 1
-%         disp('positive one')
-%     otherwise
-%         disp('other value')
-% end
+    loaded_data = load(data);
+    fn = fieldnames(loaded_data);
+    buffer = loaded_data.(fn{1});
+    [rows, ~] = size(buffer);
+    if (rows > 2)
+        
+        loaded_data = cell(rows - 1, 1);
+       
+        for i = 2:rows
+        
+            loaded_data{i - 1} = Data.structify_data(buffer(1, :), buffer(i, :));
+            
+        end
+    else
+        loaded_data = Data.structify_data(buffer(1, :), buffer(2, :));
+    end
+
+end

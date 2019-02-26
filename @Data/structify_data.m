@@ -1,18 +1,7 @@
-function structified_data = structify_data(time,values_array)
+function structified_data = structify_data(time,values)
 
-    [~, num_of_cols] = size(values_array);
-    
-    structified_data = cell(1, num_of_cols);
-    
-    for i = 1:num_of_cols
-       
-        structified_data(i) = new_data(time, values_array(:, i));
-        
-    end
-    
-    if num_of_cols == 1
-        structified_data = structified_data{1};
-    end
+    structified_data.time = time;
+    structified_data.values = values;
 
 end
 
