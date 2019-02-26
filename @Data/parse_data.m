@@ -3,6 +3,8 @@ function parsed_data = parse_data(data)
     data_type = class(data);    
 
     switch data_type
+        case {'char', 'string'}
+            handle_string(data);
         case 'struct'
             parsed_data = struct(...
             'time', data.time,...
@@ -19,6 +21,7 @@ function parsed_data = parse_data(data)
             parsed_data = {};   
    end
 end
+
 
 % switch n
 %     case -1
