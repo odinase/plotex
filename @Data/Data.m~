@@ -8,13 +8,15 @@ classdef Data < handle
         data;
         legend;
     end
-        
+    
+    
+    
     methods
         function obj = Data(data, legend)
             p = inputParser;            
         
             addRequired(p, 'data', @Data.valid_data);
-            addRequired(p, 'legend', @Data.valid_legend);
+            addRequired(p, 'legend', @Data.valid_label);
             
             parse(p, data, legend);
                         
@@ -23,14 +25,14 @@ classdef Data < handle
         end
         
         function set_data(obj, data)
-            if Data.valid_data(data)
+            if valid_data(data)
                 obj.data = data;
             end
         end
         
-        function set_label(obj, legend)
-            if Data.valid_legend(legend)
-                obj.legend = legend;
+        function set_label(obj, label)
+            if valid_label(label)
+                obj.lAB
             end
         end
         
@@ -43,7 +45,7 @@ classdef Data < handle
     methods (Access = private, Static)
          structified_data = structify_data(time, values);
          validity = valid_data(data)
-         validity = valid_legend(legend)
+         validity = valid_label(label)
     end
     
     methods (Access = private)

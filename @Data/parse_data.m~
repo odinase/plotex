@@ -1,8 +1,5 @@
 function parsed_data = parse_data(data)
-%% Function description
-% Assumes all data in array format comes with the first row with time and
-% the following rows are data
-%%
+
     data_type = class(data);    
 
     switch data_type
@@ -11,7 +8,7 @@ function parsed_data = parse_data(data)
         case 'struct'
             parsed_data = cell(data.signals.dimensions, 1);
             for i = 1:data.signals.dimensions
-                parsed_data{i} = Data.structify_data(data.time, data.signals.values(i, :));
+                parsed_data = Data.structify_data(data.time, data.signals.values(i, :));
             end
         case 'double'
             [rows, ~] = size(data);
@@ -23,7 +20,7 @@ function parsed_data = parse_data(data)
             parsed_data = {};   
    end
 end
-%%
+
 function loaded_data = load_from_file(data)
 
     loaded_data = load(data);
@@ -32,9 +29,12 @@ function loaded_data = load_from_file(data)
     [rows, ~] = size(buffer);
     loaded_data = cell(rows - 1, 1);
        
-    for i = 2:rows
-
-        loaded_data{i - 1} = Data.structify_data(buffer(1, :), buffer(i, :));
-
-    end
+        for i = 2:rows
+        
+            loaded_data{i - 1} = Data.structify_data(buffer(1, :), buffer(i, :));
+            
+        end
+    
+        loaded_data = Data.structify_data(buffer(1, :), buffer(2, :));
+    
 end
