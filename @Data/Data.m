@@ -5,7 +5,8 @@ classdef Data < handle
     end
     
     properties (SetAccess = private)
-        data;
+        values;
+        time;
         legend;
     end
         
@@ -14,22 +15,24 @@ classdef Data < handle
             p = inputParser;            
         
             addRequired(p, 'data', @Data.valid_data);
-            addRequired(p, 'legend', @Data.valid_legend);
+            addRequired(p, 'legend', @Data.valid_label);
             
             parse(p, data, legend);
                         
-            obj.data = p.Results.data;
+            obj.values = p.Results.data.values;
+            obj.time = p.Results.data.time;
             obj.legend = p.Results.legend;
         end
         
         function set_data(obj, data)
             if Data.valid_data(data)
-                obj.data = data;
+                obj.values = data.values;
+                obj.time = data.time;
             end
         end
         
-        function set_label(obj, legend)
-            if Data.valid_legend(legend)
+        function set_legend(obj, legend)
+            if Data.valid_label(legend)
                 obj.legend = legend;
             end
         end
@@ -38,17 +41,14 @@ classdef Data < handle
     
     methods (Static)
         parsed_data = parse_data(data); 
+        combined_data = combine(data, legends);
     end
     
-    methods (Access = private, Static)
+    methods (Access = ?Plotex, Static)
          structified_data = structify_data(time, values);
          validity = valid_data(data)
-         validity = valid_legend(legend)
+         validity = valid_label(legend)
     end
     
-    methods (Access = private)
-        new_data(obj, varargin);
-        
-    end
 end
 

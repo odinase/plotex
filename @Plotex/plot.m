@@ -43,15 +43,6 @@ function plot(obj)
     % Used to get pretty colors
     colors = linspecer(obj.amount_of_data);
     
-    % To get right type for later
-    if ~iscell(obj.data)
-       obj.data = {obj.data}; 
-    end
-    
-    if ~iscell(obj.labels.legend)
-       obj.labels.legend = {obj.labels.legend}; 
-    end
-    
     %% Actual plotting
     if obj.use_loglog
         for i = 1:obj.amount_of_data
@@ -75,10 +66,10 @@ function plot(obj)
        grid on; 
     end
     
-    title({obj.labels.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
-    legend(obj.labels.legend,   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
-    ylabel({obj.labels.ylabel}, 'Interpreter', 'latex');
-    xlabel({obj.labels.xlabel}, 'Interpreter', 'latex');
+    title({obj.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
+    legend(obj.extract_legends(),   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
+    ylabel({obj.ylabel}, 'Interpreter', 'latex');
+    xlabel({obj.xlabel}, 'Interpreter', 'latex');
     
     % Set font size for axis
     
@@ -96,7 +87,7 @@ function plot(obj)
     set(gca, 'TickLabelInterpreter', 'latex');
     
     if obj.use_thick_lines
-        set(pl, 'LineWidth', 3);
+        set(obj.pl, 'LineWidth', 3);
     end
     
 end

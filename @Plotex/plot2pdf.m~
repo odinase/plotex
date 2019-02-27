@@ -1,0 +1,25 @@
+function plot2pdf(obj, filename, varargin)
+
+    p = inputParser;
+    
+    valid_filename = @(x) ischar(x) || istring(x);
+    
+    addRequired(p, 'filename', valid_filename);
+    
+
+    default_width = 0.9;
+    default_height = 1;
+
+    set(obj.fig, 'Units', 'Inches');
+    pos1 = get(obj.fig, 'Position');
+    
+    width = pos1(3);
+    height = pos1(4);
+    
+    set(obj.fig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches',...
+        'PaperSize', [width*width_tuning_factor, height*height_tuning_factor]);    
+    
+    print(obj.fig, strcat(pwd, '/', filename), '-dpdf', '-r0');
+
+end
+
