@@ -16,6 +16,7 @@ classdef Plotex < handle
       amount_of_data;
       fig;
       pl;
+      subpl
    end
    %% Methods %%
    methods
@@ -90,7 +91,7 @@ classdef Plotex < handle
        init(obj, data);
    end
    
-   methods(Static)
-    
+   methods(Static, Access = private)
+        lineStyles = linspecer(N, varargin);
    end
 end

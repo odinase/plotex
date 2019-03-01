@@ -1,16 +1,20 @@
-function [fig, subp] = subplot_nice(data, labels, font_size, varargin)
+function [fig, subp] = subplot(obj)
 
-    [rows, cols] = size(data);
+    [rows, cols] = size(obj.data);
     subp = zeros(rows, cols);
 
     fig = figure;
     
+    obj.disable_figure = true;
+    
     for i = 1:rows
         for j = 1:cols
             subp(i, j) = subplot(rows, cols, (i-1)*cols + j);
-            plot_nice(data{i, j}, labels{i, j}, font_size, varargin{:}, 'disableFigure', fig);
+            obj.plot();
         end
     end
+    
+    obj.disable_figure = false;
     
 end
 

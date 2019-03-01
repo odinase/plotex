@@ -40,7 +40,7 @@ classdef Data < handle
     end
     
     methods (Static)
-        parsed_data = parse_data(data); 
+        parsed_data = parse2struct(data_source); 
         combined_data = combine(data, legends);
     end
     
