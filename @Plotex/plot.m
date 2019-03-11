@@ -41,7 +41,7 @@ function plot(obj)
     obj.pl = zeros(1, obj.amount_of_data);
     
     % Used to get pretty colors
-    colors = linspecer(obj.amount_of_data);
+    colors = Plotex.linspecer(obj.amount_of_data);
     
     %% Actual plotting
     if obj.use_loglog
@@ -52,6 +52,13 @@ function plot(obj)
 
         end
     % Default is ordinary 'plot'    
+    elseif obj.use_stairs
+        for i = 1:obj.amount_of_data
+        
+            obj.pl(i) = stairs(obj.data{i}.time, obj.data{i}.values, 'color', colors(i, :));
+            hold on
+            
+        end
     else
         for i = 1:obj.amount_of_data
         

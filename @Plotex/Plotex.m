@@ -7,7 +7,9 @@ classdef Plotex < handle
        title;
        font_size;
        disable_figure;
+       para
        use_loglog;
+       use_stairs;
        use_grid_on;
        use_thick_lines;
    end
@@ -53,32 +55,79 @@ classdef Plotex < handle
       
       plot2pdf(obj, path, filename, fig, varargin);
       plot(obj);
+      subplot(obj, varargin);
       
       %% Enable functions
-      function enable_loglog(obj)
-        obj.use_loglog = true;
-      end
+%       function enable_loglog(obj)
+%         obj.use_loglog = true;
+%       end
+%       
+%       function enable_grid_on(obj)
+%         obj.use_grid_on = true;
+%       end
+%       
+%       function enable_thick_lines(obj)
+%         obj.use_thick_lines = true;
+%       end
+%       
+%       function enable_stairs(obj)
+%         obj.use_thick_lines = true;
+%       end
       
-      function enable_grid_on(obj)
-        obj.use_grid_on = true;
-      end
-      
-      function enable_thick_lines(obj)
-        obj.use_thick_lines = true;
+      function enable(obj, parameter)
+        
+          switch char(parameter)
+          
+              case 'loglog'
+                  obj.use_thick_lines = true;
+                  
+              case 'grid'
+                  obj.use_grid_on = true;
+                  
+              case 'thick_lines'
+                  obj.use_thick_lines = true;
+                  
+              case 'stairs'
+                  obj.use_stairs = true;
+                  
+              case 'figure'
+                  obj.disable_figure = false;
+          end
       end
       
       %% Disable functions
+%       
+%       function disable_loglog(obj)
+%         obj.use_loglog = false;
+%       end
+%       
+%       function disable_grid_on(obj)
+%         obj.use_grid_on = false;
+%       end
+%       
+%       function disable_thick_lines(obj)
+%         obj.use_thick_lines = false;
+%       end
       
-      function disable_loglog(obj)
-        obj.use_loglog = false;
-      end
-      
-      function disable_grid_on(obj)
-        obj.use_grid_on = false;
-      end
-      
-      function disable_thick_lines(obj)
-        obj.use_thick_lines = false;
+      function disable(obj, parameter)
+        
+          switch char(parameter)
+          
+              case 'loglog'
+                  obj.use_thick_lines = false;
+                  
+              case 'grid'
+                  obj.use_grid_on = false;
+                  
+              case 'thick_lines'
+                  obj.use_thick_lines = false;
+                  
+              case 'stairs'
+                  obj.use_stairs = false;
+                  
+              case 'figure'
+                  obj.disable_figure = true;
+          end
       end
 
       %%
@@ -88,9 +137,11 @@ classdef Plotex < handle
        validity = valid_plot_data(data);
        legends = extract_legends(obj);
        init(obj, data);
+       
    end
    
-   methods(Static)
-    
+   methods(Access = private, Static)
+       font_size = new_font_size(varargin);
+       lineStyles = linspecer(N,varargin);
    end
 end
