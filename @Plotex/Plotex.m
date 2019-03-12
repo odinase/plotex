@@ -1,6 +1,6 @@
 classdef Plotex < handle
     %% Properties %%
-   properties %(SetAccess = private)
+   properties (SetAccess = private)
        data;
        xlabel;
        ylabel;
@@ -17,7 +17,7 @@ classdef Plotex < handle
        use_legend;
    end
    
-   properties %(Access = private)
+   properties (Access = private)
       amount_of_data;
       fig;
       pl;
@@ -137,12 +137,23 @@ classdef Plotex < handle
       function set(obj, varargin)
             p = inputParser;            
         
-            ok = @(x) ischar(x) || isstring(x);
+            ok_label = @(x) ischar(x) || isstring(x);
+            ok_boolean = @(x) isa(x, 'logical');
             
-            addParameter(p, 'title', obj.title, ok);
-            addParameter(p, 'xlabel', obj.xlabel, ok);
-            addParameter(p, 'ylabel', obj.ylabel, ok);
-            
+            addParameter(p, 'title', obj.title, ok_label);
+            addParameter(p, 'xlabel', obj.xlabel, ok_label);
+            addParameter(p, 'ylabel', obj.ylabel, ok_label);
+%             
+%        font_size;
+%        disable_figure;
+%        use_loglog;
+%        use_stairs;
+%        use_grid_on;
+%        use_thick_lines;
+%        use_title;
+%        use_xlabel;
+%        use_ylabel;
+%        use_legend;
             
             parse(p, varargin{:});
                         
@@ -158,7 +169,7 @@ classdef Plotex < handle
        init(obj, data);
    end
    
-   methods(Access = private, Static)
+   methods (Access = private, Static)
        font_size = new_font_size(varargin);
        lineStyles = linspecer(N,varargin);
    end

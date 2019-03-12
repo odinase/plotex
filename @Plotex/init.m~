@@ -7,12 +7,8 @@ function init(obj)
     obj.use_grid_on = false;
     obj.use_thick_lines = false;
     obj.use_title = false;
-    obj.use_xlabel = false;
-    obj.use_ylabel = false;
-    if obj.amount_of_data > 1
-        obj.use_legend = true;
-    else
-        obj.use_legend = false;
-    end
+    obj.use_thick_lines = false;
+    obj.use_thick_lines = false;
+    obj.use_thick_lines = false;
 end
 
