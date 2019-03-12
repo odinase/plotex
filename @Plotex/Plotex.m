@@ -1,20 +1,23 @@
 classdef Plotex < handle
     %% Properties %%
-   properties (SetAccess = private)
+   properties %(SetAccess = private)
        data;
        xlabel;
        ylabel;
        title;
        font_size;
        disable_figure;
-       para
        use_loglog;
        use_stairs;
        use_grid_on;
        use_thick_lines;
+       use_title;
+       use_xlabel;
+       use_ylabel;
+       use_legend;
    end
    
-   properties (Access = private)
+   properties %(Access = private)
       amount_of_data;
       fig;
       pl;
@@ -129,15 +132,30 @@ classdef Plotex < handle
                   obj.disable_figure = true;
           end
       end
-
+    
       %%
+      function set(obj, varargin)
+            p = inputParser;            
+        
+            ok = @(x) ischar(x) || isstring(x);
+            
+            addParameter(p, 'title', obj.title, ok);
+            addParameter(p, 'xlabel', obj.xlabel, ok);
+            addParameter(p, 'ylabel', obj.ylabel, ok);
+            
+            
+            parse(p, varargin{:});
+                        
+            obj.title = p.Results.title;
+            obj.xlabel = p.Results.xlabel;
+            obj.ylabel = p.Results.ylabel; 
+      end
    end
    
    methods (Access = private)
        validity = valid_plot_data(data);
        legends = extract_legends(obj);
        init(obj, data);
-       
    end
    
    methods(Access = private, Static)

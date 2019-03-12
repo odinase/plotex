@@ -74,7 +74,9 @@ function plot(obj)
     end
     
     title({obj.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
-    legend(obj.extract_legends(),   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
+    if obj.amount_of_data > 1
+        legend(obj.extract_legends(),   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
+    end
     ylabel({obj.ylabel}, 'Interpreter', 'latex');
     xlabel({obj.xlabel}, 'Interpreter', 'latex');
     
