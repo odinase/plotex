@@ -10,9 +10,6 @@ function plot(this)
             k = k + 1;
         end
     end
-    
-    if this.use_title
-        sgtitle(this.fig, this.title);
-    end
+    sgtitle(this.fig, 'Measured data, open loop')
 end
 

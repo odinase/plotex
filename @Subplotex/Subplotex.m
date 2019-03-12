@@ -1,15 +1,20 @@
 classdef Subplotex
     %SUBPLOTEX Summary of this class goes here
     %   Detailed explanation goes here
+    properties
+        plots;
+    end
     
     properties (SetAccess = private)
-        plots;
         title;
+        use_title;
     end
     
     properties (Access = private)
         rows;
         cols;
+        fig;
+        subpl;
     end
     
     methods
@@ -17,7 +22,7 @@ classdef Subplotex
             p = inputParser;            
             
             isPlotex = @(x) isa(x, 'Plotex');
-            valid_plots = @(x) all(all(cellfun(isPlotex, x))) || all(isPlotex(x));
+            valid_plots = @(x) length(plots) > 1 && iscell(plots) && all(all(cellfun(isPlotex, x)));
             valid_label = @(x) ischar(x) || isstring(x);
             
             default_title = '';
@@ -27,11 +32,20 @@ classdef Subplotex
             
             parse(p, plots, varargin{:});
                         
-            this.plots = p.Results.plots;
+            this.plots = p.Results.plots;         
             this.title = p.Results.title;
             [this.rows, this.cols] = size(this.plots);
-        end
-        
+            
+            if strcmp(this.title, '')
+                this.use_title = false;
+            end
+            
+            for i = 1:this.rows
+                for j = 1:this.cols
+                    this.plots{i, j}.disable('figure');
+                end
+            end
+        end        
         plot(this);
         
     end

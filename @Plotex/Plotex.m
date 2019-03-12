@@ -17,7 +17,7 @@ classdef Plotex < handle
        use_legend;
    end
    
-   properties (Access = private)
+   properties (Access = {?Subplotex, ?Plotex})
       amount_of_data;
       fig;
       pl;

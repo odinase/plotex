@@ -73,12 +73,21 @@ function plot(obj)
        grid on; 
     end
     
-    title({obj.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
-    if obj.amount_of_data > 1
+    if obj.use_title
+        title({obj.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
+    end
+    
+    if obj.use_legend
         legend(obj.extract_legends(),   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
     end
-    ylabel({obj.ylabel}, 'Interpreter', 'latex');
-    xlabel({obj.xlabel}, 'Interpreter', 'latex');
+    
+    if obj.use_xlabel
+        ylabel({obj.ylabel}, 'Interpreter', 'latex');
+    end
+    
+    if obj.use_ylabel
+        xlabel({obj.xlabel}, 'Interpreter', 'latex');
+    end
     
     % Set font size for axis
     
