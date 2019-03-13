@@ -36,9 +36,7 @@ classdef Subplotex
             this.title = p.Results.title;
             [this.rows, this.cols] = size(this.plots);
             
-            if strcmp(this.title, '')
-                this.use_title = false;
-            end
+            this.use_title = ~strcmp(p.Results.title, '');
             
             for i = 1:this.rows
                 for j = 1:this.cols

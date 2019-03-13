@@ -1,11 +1,13 @@
 classdef Plotex < handle
     %% Properties %%
-   properties (SetAccess = private)
+       properties
+          font_size; 
+       end
+    properties (SetAccess = private)
        data;
        xlabel;
        ylabel;
        title;
-       font_size;
        disable_figure;
        use_loglog;
        use_stairs;
@@ -35,7 +37,7 @@ classdef Plotex < handle
             
             isData = @(x) isa(x, 'Data');
             
-            validate_data = @(x) all(cellfun(isData, data)) || isData(data);
+            validate_data = @(x) (all(size(x) == 1) && isData(x)) || all(all(cellfun(isData, x)));
             
             addRequired(p, 'data', validate_data);
             addParameter(p, 'title', default_title, @Data.valid_label);
@@ -95,6 +97,15 @@ classdef Plotex < handle
                   
               case 'figure'
                   obj.disable_figure = false;
+                  
+              case 'title'
+                  obj.use_title = true;
+              
+              case 'xlabel'
+                  obj.use_xlabel = true;
+              
+              case 'ylabel'
+                  obj.use_ylabel= true;
           end
       end
       
@@ -130,6 +141,15 @@ classdef Plotex < handle
                   
               case 'figure'
                   obj.disable_figure = true;
+              
+              case 'title'
+                  obj.use_title = false;
+              
+              case 'xlabel'
+                  obj.use_xlabel = false;
+              
+              case 'ylabel'
+                  obj.use_ylabel= false;
           end
       end
     

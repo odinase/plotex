@@ -9,10 +9,6 @@ function init(obj)
     obj.use_title = false;
     obj.use_xlabel = false;
     obj.use_ylabel = false;
-    if obj.amount_of_data > 1
-        obj.use_legend = true;
-    else
-        obj.use_legend = false;
-    end
+    obj.use_legend = obj.amount_of_data > 1;
 end
 

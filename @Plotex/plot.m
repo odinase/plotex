@@ -81,11 +81,11 @@ function plot(obj)
         legend(obj.extract_legends(),   'Interpreter', 'latex', 'fontsize', obj.font_size.legend, 'location', 'best');
     end
     
-    if obj.use_xlabel
+    if obj.use_ylabel
         ylabel({obj.ylabel}, 'Interpreter', 'latex');
     end
     
-    if obj.use_ylabel
+    if obj.use_xlabel
         xlabel({obj.xlabel}, 'Interpreter', 'latex');
     end
     
@@ -105,7 +105,7 @@ function plot(obj)
     set(gca, 'TickLabelInterpreter', 'latex');
     
     if obj.use_thick_lines
-        set(obj.pl, 'LineWidth', 3);
+        set(obj.pl, 'LineWidth', 2);
     end
     
 end
