@@ -20,8 +20,8 @@ classdef Data < handle
             
             parse(p, X, Y, legend);
                         
-            obj.X = p.Results.X;
-            obj.Y = p.Results.Y;
+            obj.X = p.Results.data.X;
+            obj.Y = p.Results.data.Y;
             
             if (length(obj.X) ~= length(obj.Y))
                 error('X and Y vector of unequal lengths.');
@@ -30,28 +30,28 @@ classdef Data < handle
             obj.legend = p.Results.legend;
         end
         
-%         function set_data(obj, parameter, value)
-%             assert(Data.valid_label(parameter), 'First input must be a char array or string.');
-%             
-%             switch parameter
-%                 case 'XY'
-%                     assert(Data.valid_dim(value(1, 1) && ), 'Not a valid data vector. Must be one dimensional');
-%                 case 'legend'
-%                     
-%             end
-%         end
+        function set_data(obj, parameter, value)
+            assert(Data.valid_label(parameter), 'First input must be a char array or string.');
+            
+            switch parameter
+                case 'X', 'Y'}
+                    assert(Data.valid_dim(value), 'Not a valid data vector. Must be one dimensional');
+                case 'legend'
+                    
+            end
+        end
         
         
     end
     
     methods (Static)
-        obj = parse2Data(source, legend); 
+        parsed_data = parse_data(data); 
         combined_data = combine(data, legends);
     end
     
     methods (Access = ?Plotex, Static)
          structified_data = structify_data(time, values);
-         validity = valid_dim(data)
+         validity = valid_data(data)
          validity = valid_label(legend)
     end
     

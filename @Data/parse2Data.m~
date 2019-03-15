@@ -1,4 +1,4 @@
-function parsed_data = parse_data(data)
+function parsed_data = parse2Data(data, legends)
 %% Function description
 % Assumes all data in array format comes with the first row with time and
 % the following rows are data
