@@ -1,0 +1,13 @@
+function validity = valid_array_input_scheme(this, data)
+    
+    l = length(data);
+    
+    % If not divisible by 3 then it cannot be valid
+    if ~(mod(l, 3) == 0)
+        validity = false;
+        return;
+    end
+
+    validity = (isnumeric(data{1}) && isnumeric(data{2}) && Data.valid_label(data{3}) && length(data{1}) == length(data{2})));
+
+end
