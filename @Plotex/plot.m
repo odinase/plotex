@@ -34,7 +34,7 @@ function plot(obj)
 % ----------------------------------
 %% Code
     
-    if ~obj.disable_figure
+    if obj.parameters.figure
         obj.fig = figure;
     end
     
@@ -44,7 +44,7 @@ function plot(obj)
     colors = Plotex.linspecer(obj.amount_of_data);
     
     %% Actual plotting
-    if obj.use_loglog
+    if obj.parameters.loglog
         for i = 1:obj.amount_of_data
 
             obj.pl(i) = loglog(obj.data{i}.time, obj.data{i}.values, 'color', colors(i, :));
@@ -52,7 +52,7 @@ function plot(obj)
 
         end
     % Default is ordinary 'plot'    
-    elseif obj.use_stairs
+    elseif obj.parameters.stairs
         for i = 1:obj.amount_of_data
         
             obj.pl(i) = stairs(obj.data{i}.time, obj.data{i}.values, 'color', colors(i, :));
@@ -62,19 +62,19 @@ function plot(obj)
     else
         for i = 1:obj.amount_of_data
         
-            obj.pl(i) = plot(obj.data{i}.time, obj.data{i}.values, 'color', colors(i, :));
+            obj.pl(i) = plot(obj.data{i}.X, obj.data{i}.Y, 'color', colors(i, :));
             hold on
             
         end
     end
     
     % Turn on grid if requested
-    if obj.use_grid_on
+    if obj.parameters.grid
        grid on; 
     end
     
     if obj.use_title
-        title({obj.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
+        title({obj.parameters.title},   'Interpreter', 'latex', 'fontsize', obj.font_size.title);
     end
     
     if obj.use_legend
@@ -82,11 +82,11 @@ function plot(obj)
     end
     
     if obj.use_ylabel
-        ylabel({obj.ylabel}, 'Interpreter', 'latex');
+        ylabel({obj.parameters.ylabel}, 'Interpreter', 'latex');
     end
     
     if obj.use_xlabel
-        xlabel({obj.xlabel}, 'Interpreter', 'latex');
+        xlabel({obj.parameters.xlabel}, 'Interpreter', 'latex');
     end
     
     % Set font size for axis
@@ -104,7 +104,7 @@ function plot(obj)
     set(yl, 'FontSize', obj.font_size.ylabel);
     set(gca, 'TickLabelInterpreter', 'latex');
     
-    if obj.use_thick_lines
+    if obj.parameters.thick_lines
         set(obj.pl, 'LineWidth', 2);
     end
     

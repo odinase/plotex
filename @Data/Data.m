@@ -20,27 +20,14 @@ classdef Data < handle
             
             parse(p, X, Y, legend);
                         
-            obj.X = p.Results.X;
-            obj.Y = p.Results.Y;
-            
-            if (length(obj.X) ~= length(obj.Y))
+            if (length(p.Results.X) ~= length(p.Results.Y))
                 error('X and Y vector of unequal lengths.');
             end
             
+            obj.X = p.Results.X;
+            obj.Y = p.Results.Y;
             obj.legend = p.Results.legend;
         end
-        
-%         function set_data(obj, parameter, value)
-%             assert(Data.valid_label(parameter), 'First input must be a char array or string.');
-%             
-%             switch parameter
-%                 case 'XY'
-%                     assert(Data.valid_dim(value(1, 1) && ), 'Not a valid data vector. Must be one dimensional');
-%                 case 'legend'
-%                     
-%             end
-%         end
-        
         
     end
     

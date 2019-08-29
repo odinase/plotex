@@ -6,18 +6,18 @@ classdef Plotex < handle
     properties (SetAccess = private)
        data;
        parameters;
-%         xlabel;
-%         ylabel;
-%         title;
+%        xlabel;
+%        ylabel;
+%        title;
 %        use_figure;
 %        use_loglog;
 %        use_stairs;
 %        use_grid_on;
 %        use_thick_lines;
-       use_title;
-       use_xlabel;
-       use_ylabel;
-       use_legend;
+%        use_title;
+%        use_xlabel;
+%        use_ylabel;
+%        use_legend;
     end
    
     properties (Constant)
@@ -65,9 +65,9 @@ classdef Plotex < handle
             [data, params] = obj.split_input(varargin{:});
             
             if Data.valid_label(data{1})
-                [~, name, ext] = fileparts(data{1});
+                [~, ~, ext] = fileparts(data{1});
                 if ismember(ext, obj.VALID_EXT)
-                    obj.load_from_file(name, ext, data{2});
+                    
                 end
             end
             
@@ -81,14 +81,14 @@ classdef Plotex < handle
             addParameter(p, 'grid', obj.DEFAULTS.grid, isbool);
             addParameter(p, 'thick_lines', obj.DEFAULTS.thick_lines, isbool);
             
-            parse(p, params{:});
+            parse(p, params);
             
             obj.init(p.Results);
           
       end
       %%% ----------- %%%
       
-      plot2pdf(obj, filename, varargin);
+      plot2pdf(obj, path, filename, fig, varargin);
       plot(obj);
       subplot(obj, varargin);
       

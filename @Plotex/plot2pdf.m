@@ -8,10 +8,10 @@ function plot2pdf(obj, filename, varargin)
     default_path = '';
     
     addRequired(p, 'filename', valid_string);
+    addOptional(p, 'path', default_path, valid_string);
     addParameter(p, 'width', default_width, @isnumeric);
     addParameter(p, 'height', default_height, @isnumeric);
-    addParameter(p, 'path', default_path, valid_string);
-
+    
     parse(p, filename, varargin{:});
     
     filename = p.Results.filename;
