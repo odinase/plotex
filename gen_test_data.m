@@ -2,10 +2,18 @@ close all
 clear
 clc
 
-load('test.mat');
+data = load('test.mat');
+data = data.measured_data;
+[r, c] = size(data);
 
-X = measured_data(1, :);
-Y1 = measured_data(2, :);
-Y2 = measured_data(3, :);
-l1 = {'X', 'Y1'};
-l2 = {'X', 'Y2'};
+X = data(1, :);
+Y = data(2:end, :);
+l = cell(r - 1, 1);
+for i = 1:length(l)
+    l{i} = strcat('Y', num2str(i));
+end
+
+p = cell(r - 1, 1);
+for i = 1:(r - 1)
+    p{i} = Plotex(X, Y(i, :), l{i});
+end

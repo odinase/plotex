@@ -3,7 +3,7 @@ function [data, params] = split_input(this, varargin)
     str_matches = zeros(length(varargin), 1);
     
     for i = 1:length(this.VALID_PARAMS)
-        str_matches = or(str_matches, strcmpi(this.VALID_PARAMS{i}, varargin'));
+        str_matches = or(str_matches, strcmp(this.VALID_PARAMS{i}, varargin'));
     end
     
     split_index = find(str_matches, 1, 'first');

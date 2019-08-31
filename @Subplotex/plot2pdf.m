@@ -1,10 +1,10 @@
-function plot2pdf(obj, varargin)
+function plot2pdf(this, varargin)
 
     p = inputParser;
     
     valid_string = @(x) ischar(x) || istring(x);
     default_path = '';
-    default_filename = strcat('plot_', num2str(fix(clock)));
+    default_filename = strcat('subplot_', num2str(fix(clock)));
     default_filename = default_filename(default_filename ~= ' ');
     
     addOptional(p, 'filename', default_filename, valid_string);
@@ -15,20 +15,20 @@ function plot2pdf(obj, varargin)
     filename = p.Results.filename;
     path = p.Results.path;
     
-    set(obj.fig, 'Units', 'Inches');
-    pos1 = get(obj.fig, 'Position');
+    set(this.fig, 'Units', 'Inches');
+    pos1 = get(this.fig, 'Position');
     
     fig_width = pos1(3);
     fig_height = pos1(4);
     
-    set(obj.fig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches',...
+    set(this.fig, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches',...
         'PaperSize', [fig_width, fig_height]);    
     
     if (strcmp(path, default_path))
         path = strcat(pwd, '/');
     end
     
-    print(obj.fig, strcat(path, filename), '-dpdf', '-r0', '-bestfit');
+    print(this.fig, strcat(path, filename), '-dpdf', '-r0', '-bestfit');
 
 end
 

@@ -36,7 +36,7 @@ classdef Data < handle
         combined_data = combine(data, legends);
     end
     
-    methods (Access = ?Plotex, Static)
+    methods (Access = {?Plotex, ?Subplotex}, Static)
          structified_data = structify_data(time, values);
          validity = valid_dim(data)
          validity = valid_label(legend)

@@ -1,4 +1,6 @@
-function plot(this)
+function p = plot(this)
+
+    close(this.fig);
 
     this.fig = figure;
     k = 1;
@@ -7,10 +9,6 @@ function plot(this)
         for j = 1:this.cols
             this.subpl(i, j) = subplot(this.rows, this.cols, k);
             this.plots{i, j}.plot();
-%             ax = gca;
-%             ax.TickLabelInterpreter='latex';
-%             yticks([-pi/2 -pi/4 0 pi/4 pi/2 3*pi/4 pi 5*pi/4 3*pi/2 7*pi/4 2*pi])
-%             yticklabels({'-\pi', '$-\pi/4$', '0','$\pi/2$', '$\pi$', '$3\pi/2$', '$2\pi$'})
             k = k + 1;
         end
     end
@@ -18,6 +16,8 @@ function plot(this)
     if this.use_title
         sgtitle(this.fig, strcat('\textbf{', this.title, '}'), 'Interpreter', 'latex', 'Fontsize', 16', 'fontweight', 'bold');
     end
+    
+    p = this;
    
 end
 

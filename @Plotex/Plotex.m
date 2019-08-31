@@ -58,34 +58,12 @@ classdef Plotex < handle
                         
             p = inputParser;            
             
-            isData = @(x) isa(x, 'Data');
             isbool = @(x) isa(x, 'logical');
             
             % If no data source is provided, this function throws an error.
             [data, params] = this.split_input(varargin{:});
             
-            if Data.valid_label(data{1})
-                [~, name, ext] = fileparts(data{1});
-                if ismember(ext, this.VALID_EXT)
-                    this.load_from_file(name, ext, data{2});
-                else
-                    error('Could not detect correct file extension, aborting.');
-                end
-            end
-            
-            l = length(data);
-            vl = this.get_valid_len(data);
-            if vl < l
-                warning('Detected less readable data than given, are all parameter names typed correctly? Data must be given as X, Y, label, in that specific order.');
-            end
-            this.data = cell(vl/3, 1);
-                for i = 1:vl/3
-                    % Iteration variable to get every third element of
-                    % input data
-                    j = 3*(i - 1) + 1;
-                    this.data{i} = Data(data{j}, data{j + 1}, data{j + 2});
-                end
-            
+            this.parse_data(data);
             
             addParameter(p, 'title', this.DEFAULTS.title, @Data.valid_label);
             addParameter(p, 'xlabel', this.DEFAULTS.xlabel, @Data.valid_label);
@@ -104,7 +82,7 @@ classdef Plotex < handle
       %%% ----------- %%%
       
       plot2pdf(this, filename, varargin);
-      plot(this);
+      p = plot(this);
       subplot(this, varargin);
       
       function enable(this, parameter)
@@ -112,19 +90,19 @@ classdef Plotex < handle
           switch char(parameter)
           
               case 'loglog'
-                  this.use_thick_lines = true;
+                  this.parameters.loglog = true;
                   
               case 'grid'
-                  this.use_grid_on = true;
+                  this.parameters.grid = true;
                   
               case 'thick_lines'
-                  this.use_thick_lines = true;
+                  this.parameters.thick_lines = true;
                   
               case 'stairs'
-                  this.use_stairs = true;
+                  this.parameters.stairs = true;
                   
               case 'figure'
-                  this.use_figure = true;
+                  this.parameters.figure = true;
                   
               case 'title'
                   this.use_title = true;
@@ -145,19 +123,19 @@ classdef Plotex < handle
           switch char(parameter)
           
               case 'loglog'
-                  this.use_thick_lines = false;
+                  this.parameters.loglog = false;
                   
               case 'grid'
-                  this.use_grid_on = false;
+                  this.parameters.grid = false;
                   
               case 'thick_lines'
-                  this.use_thick_lines = false;
+                  this.parameters.thick_lines = false;
                   
               case 'stairs'
-                  this.use_stairs = false;
+                  this.parameters.stairs = false;
                   
               case 'figure'
-                  this.use_figure = false;
+                  this.parameters.figure = false;
               
               case 'title'
                   this.use_title = false;
@@ -211,6 +189,7 @@ classdef Plotex < handle
        [data, params] = split_input(this, varargin);
        vl = get_valid_len(this, data);
        set_line_width(this, line_width);
+       parse_data(this, data);
    end
    
    methods (Access = private, Static)
