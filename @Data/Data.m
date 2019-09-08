@@ -1,52 +1,44 @@
 classdef Data < handle
     
-    properties
-        % Empty
+    properties (Access = private)
+        data_size;
     end
     
     properties (SetAccess = private)
-        values;
-        time;
+        X;
+        Y;
         legend;
     end
         
     methods
-        function obj = Data(data, legend)
+        function obj = Data(X, Y, legend)
             p = inputParser;            
-        
-            addRequired(p, 'data', @Data.valid_data);
+            
+            addRequired(p, 'X', @Data.valid_dim);
+            addRequired(p, 'Y', @Data.valid_dim);
             addRequired(p, 'legend', @Data.valid_label);
             
-            parse(p, data, legend);
+            parse(p, X, Y, legend);
                         
-            obj.values = p.Results.data.values;
-            obj.time = p.Results.data.time;
+            if (length(p.Results.X) ~= length(p.Results.Y))
+                error('X and Y vector of unequal lengths.');
+            end
+            
+            obj.X = p.Results.X;
+            obj.Y = p.Results.Y;
             obj.legend = p.Results.legend;
-        end
-        
-        function set_data(obj, data)
-            if Data.valid_data(data)
-                obj.values = data.values;
-                obj.time = data.time;
-            end
-        end
-        
-        function set_legend(obj, legend)
-            if Data.valid_label(legend)
-                obj.legend = legend;
-            end
         end
         
     end
     
     methods (Static)
-        parsed_data = parse_data(data); 
+        obj = parse2Data(source, legend); 
         combined_data = combine(data, legends);
     end
     
-    methods (Access = ?Plotex, Static)
+    methods (Access = {?Plotex, ?Subplotex}, Static)
          structified_data = structify_data(time, values);
-         validity = valid_data(data)
+         validity = valid_dim(data)
          validity = valid_label(legend)
     end
     

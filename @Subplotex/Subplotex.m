@@ -1,4 +1,4 @@
-classdef Subplotex
+classdef Subplotex < handle
     %SUBPLOTEX Summary of this class goes here
     %   Detailed explanation goes here
     properties
@@ -17,26 +17,44 @@ classdef Subplotex
         subpl;
     end
     
+    properties (Constant, Access = private)
+        VALID_PARAMS = {'title',...
+                        'shape'};
+        VALID_EXT = {'.mat'};
+        DEFAULTS = struct('title', '');
+    end
+    
     methods
-        function this = Subplotex(plots, varargin)
+        function this = Subplotex(varargin)
             p = inputParser;            
             
-            isPlotex = @(x) isa(x, 'Plotex');
-            valid_plots = @(x) length(plots) > 1 && iscell(plots) && all(all(cellfun(isPlotex, x)));
-            valid_label = @(x) ischar(x) || isstring(x);
+            [data, params] = this.split_input(varargin{:});
             
-            default_title = '';
+            % If data is originally passed as cell array it will be nested within
+            % another cell array, needs to extract first.
+            if length(data) == 1 && iscell(data{1})
+                data = data{1};
+            end
+
+            % Transpose to get plots aligned vertically
+            [this.rows, this.cols] = size(data');
             
-            addRequired(p, 'plots', valid_plots);
-            addOptional(p, 'title', default_title, valid_label);
+            this.parse_data(data);
             
-            parse(p, plots, varargin{:});
-                        
-            this.plots = p.Results.plots;         
+            valid_shape = @(x) isnumeric(x) && (length(x) == 2) && (x(1)*x(2) == this.rows*this.cols);
+            
+            addParameter(p, 'title', this.DEFAULTS.title, @Data.valid_label);
+            addParameter(p, 'shape', [this.rows, this.cols], valid_shape);
+            
+            parse(p, params{:});
+            
+            this.rows = p.Results.shape(1);
+            this.cols = p.Results.shape(2);       
             this.title = p.Results.title;
-            [this.rows, this.cols] = size(this.plots);
             
             this.use_title = ~strcmp(p.Results.title, '');
+            
+            this.plots = reshape(this.plots, this.rows, this.cols);
             
             for i = 1:this.rows
                 for j = 1:this.cols
@@ -44,8 +62,44 @@ classdef Subplotex
                 end
             end
         end        
-        plot(this);
+        p = plot(this);
+        plot2pdf(this, varargin);
         
+      function enable(this, parameter)
+        
+          switch char(lower(parameter))
+              case 'title'
+                  this.use_title = true;
+          end
+      end
+      
+      function disable(this, parameter)
+        
+          switch char(lower(parameter))
+              case 'title'
+                  this.use_title = false;
+          end
+      end
+    
+      
+      function set(this, varargin)
+            p = inputParser;            
+        
+            addParameter(p, 'title', this.title, @Data.valid_label);
+            
+            parse(p, varargin{:});
+                        
+            this.title = p.Results.title;
+      end
     end
+        
+       methods (Access = private)
+           [data, params] = split_input(this, varargin);
+           vl = get_valid_len(this, data);
+           parse_data(this, data);
+           function valid = isPlotex(this, x) 
+               valid = isa(x, 'Plotex');
+           end
+       end
 end
 

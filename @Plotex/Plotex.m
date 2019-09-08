@@ -5,19 +5,35 @@ classdef Plotex < handle
        end
     properties (SetAccess = private)
        data;
-       xlabel;
-       ylabel;
-       title;
-       disable_figure;
-       use_loglog;
-       use_stairs;
-       use_grid_on;
-       use_thick_lines;
+       parameters;
        use_title;
        use_xlabel;
        use_ylabel;
        use_legend;
-   end
+    end
+   
+    properties (Constant)
+       VALID_PARAMS = {'loglog',...
+                'grid',...
+                'thick_lines',...
+                'stairs',...
+                'figure',...
+                'title',...
+                'xlabel',...
+                'ylabel'...
+                'legend'};
+        VALID_EXT = {'.mat'};
+       DEFAULTS = struct(...
+           'loglog',        false,...
+           'grid',          false,...
+           'thick_lines',   false,...
+           'stairs',        false,...
+           'figure',        true,...
+           'title',         'Plot',...
+           'xlabel',        'Time',...
+           'ylabel',        'Values',...
+           'legend',        true);
+    end
    
    properties (Access = {?Subplotex, ?Plotex})
       amount_of_data;
@@ -28,169 +44,137 @@ classdef Plotex < handle
    methods
       
        %%% Constructor %%%
-      function obj = Plotex(data, varargin)
-            p = inputParser;            
-        
-            default_xlabel = 'Time';
-            default_ylabel = 'Values';
-            default_title = 'Plot';
-            
-            isData = @(x) isa(x, 'Data');
-            
-            validate_data = @(x) (all(size(x) == 1) && isData(x)) || all(all(cellfun(isData, x)));
-            
-            addRequired(p, 'data', validate_data);
-            addParameter(p, 'title', default_title, @Data.valid_label);
-            addParameter(p, 'xlabel', default_xlabel, @Data.valid_label);
-            addParameter(p, 'ylabel', default_ylabel, @Data.valid_label);
-            
-            parse(p, data, varargin{:});
-            
-            obj.data = p.Results.data;
-            if ~iscell(obj.data)
-                obj.data = {obj.data};
+      function this = Plotex(varargin)
+          
+            if nargin == 0
+                error('No input parameters given. Must at least provide source for data as filename or three input parameters X, Y, label.');
             end
-            obj.title = p.Results.title;
-            obj.xlabel = p.Results.xlabel;
-            obj.ylabel = p.Results.ylabel;
-            obj.init();
+                        
+            p = inputParser;            
+            
+            isbool = @(x) isa(x, 'logical');
+            
+            % If no data source is provided, this function throws an error.
+            [data, params] = this.split_input(varargin{:});
+            
+            this.parse_data(data);
+            
+            addParameter(p, 'title', this.DEFAULTS.title, @Data.valid_label);
+            addParameter(p, 'xlabel', this.DEFAULTS.xlabel, @Data.valid_label);
+            addParameter(p, 'ylabel', this.DEFAULTS.ylabel, @Data.valid_label);
+            addParameter(p, 'loglog', this.DEFAULTS.loglog, isbool);
+            addParameter(p, 'stairs', this.DEFAULTS.stairs, isbool);
+            addParameter(p, 'figure', this.DEFAULTS.figure, isbool);
+            addParameter(p, 'grid', this.DEFAULTS.grid, isbool);
+            addParameter(p, 'thick_lines', this.DEFAULTS.thick_lines, isbool);
+            addParameter(p, 'legend', this.DEFAULTS.legend, isbool);
+            
+            parse(p, params{:});
+            
+            this.init(p.Results, p.UsingDefaults);
           
       end
       %%% ----------- %%%
       
-      plot2pdf(obj, path, filename, fig, varargin);
-      plot(obj);
-      subplot(obj, varargin);
+      plot2pdf(this, varargin);
+      p = plot(this);
+      subplot(this, varargin);
       
-      %% Enable functions
-%       function enable_loglog(obj)
-%         obj.use_loglog = true;
-%       end
-%       
-%       function enable_grid_on(obj)
-%         obj.use_grid_on = true;
-%       end
-%       
-%       function enable_thick_lines(obj)
-%         obj.use_thick_lines = true;
-%       end
-%       
-%       function enable_stairs(obj)
-%         obj.use_thick_lines = true;
-%       end
-      
-      function enable(obj, parameter)
+      function enable(this, parameter)
         
-          switch char(parameter)
+          switch char(lower(parameter))
           
               case 'loglog'
-                  obj.use_thick_lines = true;
+                  this.parameters.loglog = true;
                   
               case 'grid'
-                  obj.use_grid_on = true;
+                  this.parameters.grid = true;
                   
               case 'thick_lines'
-                  obj.use_thick_lines = true;
+                  this.parameters.thick_lines = true;
                   
               case 'stairs'
-                  obj.use_stairs = true;
+                  this.parameters.stairs = true;
                   
               case 'figure'
-                  obj.disable_figure = false;
+                  this.parameters.figure = true;
                   
               case 'title'
-                  obj.use_title = true;
+                  this.use_title = true;
               
               case 'xlabel'
-                  obj.use_xlabel = true;
+                  this.use_xlabel = true;
               
               case 'ylabel'
-                  obj.use_ylabel= true;
+                  this.use_ylabel = true;
+              
+              case 'legend'
+                  this.use_legend = true;
           end
       end
       
-      %% Disable functions
-%       
-%       function disable_loglog(obj)
-%         obj.use_loglog = false;
-%       end
-%       
-%       function disable_grid_on(obj)
-%         obj.use_grid_on = false;
-%       end
-%       
-%       function disable_thick_lines(obj)
-%         obj.use_thick_lines = false;
-%       end
-      
-      function disable(obj, parameter)
+      function disable(this, parameter)
         
-          switch char(parameter)
+          switch char(lower(parameter))
           
               case 'loglog'
-                  obj.use_thick_lines = false;
+                  this.parameters.loglog = false;
                   
               case 'grid'
-                  obj.use_grid_on = false;
+                  this.parameters.grid = false;
                   
               case 'thick_lines'
-                  obj.use_thick_lines = false;
+                  this.parameters.thick_lines = false;
                   
               case 'stairs'
-                  obj.use_stairs = false;
+                  this.parameters.stairs = false;
                   
               case 'figure'
-                  obj.disable_figure = true;
+                  this.parameters.figure = false;
               
               case 'title'
-                  obj.use_title = false;
+                  this.use_title = false;
               
               case 'xlabel'
-                  obj.use_xlabel = false;
+                  this.use_xlabel = false;
               
               case 'ylabel'
-                  obj.use_ylabel= false;
+                  this.use_ylabel= false;
+
+              case 'legend'
+                  this.use_legend = false;
           end
       end
     
-      %%
-      function set(obj, varargin)
+      
+      function set(this, varargin)
             p = inputParser;            
         
-            ok_label = @(x) ischar(x) || isstring(x);
-            ok_boolean = @(x) isa(x, 'logical');
-            
-            addParameter(p, 'title', obj.title, ok_label);
-            addParameter(p, 'xlabel', obj.xlabel, ok_label);
-            addParameter(p, 'ylabel', obj.ylabel, ok_label);
-%             
-%        font_size;
-%        disable_figure;
-%        use_loglog;
-%        use_stairs;
-%        use_grid_on;
-%        use_thick_lines;
-%        use_title;
-%        use_xlabel;
-%        use_ylabel;
-%        use_legend;
+            addParameter(p, 'title', this.title, @Data.valid_label);
+            addParameter(p, 'xlabel', this.xlabel, @Data.valid_label);
+            addParameter(p, 'ylabel', this.ylabel, @Data.valid_label);
             
             parse(p, varargin{:});
                         
-            obj.title = p.Results.title;
-            obj.xlabel = p.Results.xlabel;
-            obj.ylabel = p.Results.ylabel; 
+            this.title = p.Results.title;
+            this.xlabel = p.Results.xlabel;
+            this.ylabel = p.Results.ylabel; 
       end
    end
    
    methods (Access = private)
        validity = valid_plot_data(data);
-       legends = extract_legends(obj);
-       init(obj, data);
+       legends = extract_legends(this);
+       init(obj, parse_results, parse_defaults);
+       [data, params] = split_input(this, varargin);
+       vl = get_valid_len(this, data);
+       set_line_width(this, line_width);
+       parse_data(this, data);
    end
    
    methods (Access = private, Static)
        font_size = new_font_size(varargin);
        lineStyles = linspecer(N,varargin);
    end
+   %%
 end
