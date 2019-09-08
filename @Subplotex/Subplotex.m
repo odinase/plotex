@@ -17,8 +17,9 @@ classdef Subplotex < handle
         subpl;
     end
     
-    properties (Constant)
-        VALID_PARAMS = {'title'};
+    properties (Constant, Access = private)
+        VALID_PARAMS = {'title',...
+                        'shape'};
         VALID_EXT = {'.mat'};
         DEFAULTS = struct('title', '');
     end
@@ -64,16 +65,37 @@ classdef Subplotex < handle
         p = plot(this);
         plot2pdf(this, varargin);
         
-         
+      function enable(this, parameter)
+        
+          switch char(lower(parameter))
+              case 'title'
+                  this.use_title = true;
+          end
+      end
+      
+      function disable(this, parameter)
+        
+          switch char(lower(parameter))
+              case 'title'
+                  this.use_title = false;
+          end
+      end
+    
+      
+      function set(this, varargin)
+            p = inputParser;            
+        
+            addParameter(p, 'title', this.title, @Data.valid_label);
+            
+            parse(p, varargin{:});
+                        
+            this.title = p.Results.title;
+      end
     end
         
        methods (Access = private)
-           % validity = valid_plot_data(data);
-           % legends = extract_legends(this);
-           % init(obj, parse_results, parse_defaults);
            [data, params] = split_input(this, varargin);
            vl = get_valid_len(this, data);
-           % set_line_width(this, line_width);
            parse_data(this, data);
            function valid = isPlotex(this, x) 
                valid = isa(x, 'Plotex');

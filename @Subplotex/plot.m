@@ -1,7 +1,5 @@
 function p = plot(this)
 
-    close(this.fig);
-
     this.fig = figure;
     k = 1;
     set(0, 'defaultAxesTickLabelInterpreter','latex'); set(0, 'defaultLegendInterpreter','latex');

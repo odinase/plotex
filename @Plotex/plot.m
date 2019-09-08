@@ -4,8 +4,6 @@ function p = plot(this)
 % to the figure and the plots in the figure
 %% Code
     
-    close(this.fig);
-    
     if this.parameters.figure
         this.fig = figure;
     end
@@ -19,7 +17,7 @@ function p = plot(this)
     if this.parameters.loglog
         for i = 1:this.amount_of_data
 
-            this.pl(i) = loglog(this.data{i}.time, this.data{i}.values, 'color', colors(i, :));
+            this.pl(i) = loglog(this.data{i}.X, this.data{i}.Y, 'color', colors(i, :));
             hold on
 
         end
@@ -27,7 +25,7 @@ function p = plot(this)
     elseif this.parameters.stairs
         for i = 1:this.amount_of_data
         
-            this.pl(i) = stairs(this.data{i}.time, this.data{i}.values, 'color', colors(i, :));
+            this.pl(i) = stairs(this.data{i}.X, this.data{i}.Y, 'color', colors(i, :));
             hold on
             
         end

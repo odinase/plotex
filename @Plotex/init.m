@@ -5,6 +5,7 @@ function init(obj, parse_results, parse_defaults)
     obj.use_title = ~ismember('title', parse_defaults);
     obj.use_xlabel = ~ismember('xlabel', parse_defaults);
     obj.use_ylabel = ~ismember('ylabel', parse_defaults);
-    obj.use_legend = obj.amount_of_data > 1;
+    obj.use_legend = parse_results.legend;
 end
+
 

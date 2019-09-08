@@ -6,14 +6,6 @@ classdef Plotex < handle
     properties (SetAccess = private)
        data;
        parameters;
-%         xlabel;
-%         ylabel;
-%         title;
-%        use_figure;
-%        use_loglog;
-%        use_stairs;
-%        use_grid_on;
-%        use_thick_lines;
        use_title;
        use_xlabel;
        use_ylabel;
@@ -28,7 +20,8 @@ classdef Plotex < handle
                 'figure',...
                 'title',...
                 'xlabel',...
-                'ylabel'};
+                'ylabel'...
+                'legend'};
         VALID_EXT = {'.mat'};
        DEFAULTS = struct(...
            'loglog',        false,...
@@ -38,7 +31,8 @@ classdef Plotex < handle
            'figure',        true,...
            'title',         'Plot',...
            'xlabel',        'Time',...
-           'ylabel',        'Values');
+           'ylabel',        'Values',...
+           'legend',        true);
     end
    
    properties (Access = {?Subplotex, ?Plotex})
@@ -73,6 +67,7 @@ classdef Plotex < handle
             addParameter(p, 'figure', this.DEFAULTS.figure, isbool);
             addParameter(p, 'grid', this.DEFAULTS.grid, isbool);
             addParameter(p, 'thick_lines', this.DEFAULTS.thick_lines, isbool);
+            addParameter(p, 'legend', this.DEFAULTS.legend, isbool);
             
             parse(p, params{:});
             
@@ -81,13 +76,13 @@ classdef Plotex < handle
       end
       %%% ----------- %%%
       
-      plot2pdf(this, filename, varargin);
+      plot2pdf(this, varargin);
       p = plot(this);
       subplot(this, varargin);
       
       function enable(this, parameter)
         
-          switch char(parameter)
+          switch char(lower(parameter))
           
               case 'loglog'
                   this.parameters.loglog = true;
@@ -120,7 +115,7 @@ classdef Plotex < handle
       
       function disable(this, parameter)
         
-          switch char(parameter)
+          switch char(lower(parameter))
           
               case 'loglog'
                   this.parameters.loglog = false;
@@ -151,28 +146,13 @@ classdef Plotex < handle
           end
       end
     
-      %%
+      
       function set(this, varargin)
             p = inputParser;            
         
-            ok_label = @(x) ischar(x) || isstring(x);
-            ok_boolean = @(x) isa(x, 'logical');
-            
-            addParameter(p, 'title', this.title, ok_label);
-            addParameter(p, 'xlabel', this.xlabel, ok_label);
-            addParameter(p, 'ylabel', this.ylabel, ok_label);
-            % addParameter(p, 'line_width', 2, @isnumeric);
-%             
-%        font_size;
-%        disable_figure;
-%        use_loglog;
-%        use_stairs;
-%        use_grid_on;
-%        use_thick_lines;
-%        use_title;
-%        use_xlabel;
-%        use_ylabel;
-%        use_legend;
+            addParameter(p, 'title', this.title, @Data.valid_label);
+            addParameter(p, 'xlabel', this.xlabel, @Data.valid_label);
+            addParameter(p, 'ylabel', this.ylabel, @Data.valid_label);
             
             parse(p, varargin{:});
                         
@@ -196,4 +176,5 @@ classdef Plotex < handle
        font_size = new_font_size(varargin);
        lineStyles = linspecer(N,varargin);
    end
+   %%
 end

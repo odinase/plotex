@@ -4,15 +4,18 @@ function plot2pdf(this, varargin)
     
     valid_string = @(x) ischar(x) || istring(x);
     default_path = '';
+    default_file_format = 'pdf';
     default_filename = strcat('subplot_', num2str(fix(clock)));
     default_filename = default_filename(default_filename ~= ' ');
     
-    addOptional(p, 'filename', default_filename, valid_string);
-    addOptional(p, 'path', default_path, valid_string);
+    addParameter(p, 'filename', default_filename, valid_string);
+    addParameter(p, 'path', default_path, valid_string);
+    addParameter(p, 'fileformat', default_file_format, valid_string);
     
     parse(p, varargin{:});
     
     filename = p.Results.filename;
+    fileformat = ['-d', p.Results.fileformat];
     path = p.Results.path;
     
     set(this.fig, 'Units', 'Inches');
@@ -28,7 +31,11 @@ function plot2pdf(this, varargin)
         path = strcat(pwd, '/');
     end
     
-    print(this.fig, strcat(path, filename), '-dpdf', '-r0', '-bestfit');
+    if path(end) ~= '/'
+        path(end + 1) = '/';
+    end
+    
+    print(this.fig, strcat(path, filename), fileformat, '-r0');
 
 end
 
