@@ -1,0 +1,22 @@
+function p = merge(varargin)
+    % Needs to check if parameter list or cell array
+    if iscell(varargin{1}) && length(varargin) == 1
+        plots = varargin{1};
+        p = Plotex.merge(plots{:});
+        return;
+    end
+    
+    p = Plotex(0, 0, '');
+    p.data = cell(length(varargin), 1);
+    
+    for i = 1:length(varargin)
+        for j = 1:varargin{i}.amount_of_data
+            p
+            p.data{i}.X = varargin{i}.data{j}.X;
+            p.data{i}.Y = varargin{i}.data{j}.Y;
+            p.data{i}.legend = varargin{i}.data{j}.legend;
+        end
+    end
+        
+end
+

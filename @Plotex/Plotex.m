@@ -172,6 +172,10 @@ classdef Plotex < handle
        parse_data(this, data);
    end
    
+   methods (Static)
+       p = merge(varargin);
+   end
+   
    methods (Access = private, Static)
        font_size = new_font_size(varargin);
        lineStyles = linspecer(N,varargin);
