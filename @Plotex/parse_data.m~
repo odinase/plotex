@@ -5,7 +5,7 @@ function parse_data(this, data)
         if ismember(ext, this.VALID_EXT)
             % Extract labels depending on if it is passed as cell
             % array or raw input parameters.
-            if all(cellfun(@Data.valid_label, data(2:end)))
+            if length(data) > 2 && @Data.
                 labels = data(2:end);
             else
                 labels = data{2};
