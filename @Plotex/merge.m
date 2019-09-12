@@ -1,4 +1,5 @@
 function p = merge(varargin)
+
     % Needs to check if parameter list or cell array
     if iscell(varargin{1}) && length(varargin) == 1
         plots = varargin{1};

@@ -80,9 +80,9 @@ classdef Plotex < handle
       p = plot(this);
       subplot(this, varargin);
       
-      function enable(this, parameter)
-        
-          switch char(lower(parameter))
+      function enable(this, varargin)
+        for i = 1:length(varargin)
+          switch char(lower(varargin{i}))
           
               case 'loglog'
                   this.parameters.loglog = true;
@@ -110,39 +110,44 @@ classdef Plotex < handle
               
               case 'legend'
                   this.use_legend = true;
+              otherwise
           end
+        end
       end
       
-      function disable(this, parameter)
+      function disable(this, varargin)
         
-          switch char(lower(parameter))
-          
-              case 'loglog'
-                  this.parameters.loglog = false;
-                  
-              case 'grid'
-                  this.parameters.grid = false;
-                  
-              case 'thick_lines'
-                  this.parameters.thick_lines = false;
-                  
-              case 'stairs'
-                  this.parameters.stairs = false;
-                  
-              case 'figure'
-                  this.parameters.figure = false;
-              
-              case 'title'
-                  this.use_title = false;
-              
-              case 'xlabel'
-                  this.use_xlabel = false;
-              
-              case 'ylabel'
-                  this.use_ylabel= false;
+          for i = 1:length(varargin)
+              switch char(lower(varargin{i}))
 
-              case 'legend'
-                  this.use_legend = false;
+                  case 'loglog'
+                      this.parameters.loglog = false;
+
+                  case 'grid'
+                      this.parameters.grid = false;
+
+                  case 'thick_lines'
+                      this.parameters.thick_lines = false;
+
+                  case 'stairs'
+                      this.parameters.stairs = false;
+
+                  case 'figure'
+                      this.parameters.figure = false;
+
+                  case 'title'
+                      this.use_title = false;
+
+                  case 'xlabel'
+                      this.use_xlabel = false;
+
+                  case 'ylabel'
+                      this.use_ylabel= false;
+
+                  case 'legend'
+                      this.use_legend = false;
+                  otherwise
+              end
           end
       end
     
