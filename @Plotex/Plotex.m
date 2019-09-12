@@ -150,15 +150,19 @@ classdef Plotex < handle
       function set(this, varargin)
             p = inputParser;            
         
-            addParameter(p, 'title', this.title, @Data.valid_label);
-            addParameter(p, 'xlabel', this.xlabel, @Data.valid_label);
-            addParameter(p, 'ylabel', this.ylabel, @Data.valid_label);
+            addParameter(p, 'title', this.parameters.title, @Data.valid_label);
+            addParameter(p, 'xlabel', this.parameters.xlabel, @Data.valid_label);
+            addParameter(p, 'ylabel', this.parameters.ylabel, @Data.valid_label);
             
             parse(p, varargin{:});
                         
-            this.title = p.Results.title;
-            this.xlabel = p.Results.xlabel;
-            this.ylabel = p.Results.ylabel; 
+            this.parameters.title = p.Results.title;
+            this.parameters.xlabel = p.Results.xlabel;
+            this.parameters.ylabel = p.Results.ylabel;
+            
+            this.use_title = ~ismember('title', p.UsingDefaults);
+            this.use_xlabel = ~ismember('xlabel', p.UsingDefaults);
+            this.use_ylabel = ~ismember('ylabel', p.UsingDefaults);
       end
    end
    
